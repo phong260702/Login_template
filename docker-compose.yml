@@ -1,0 +1,30 @@
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./app/public/index.html:/usr/share/nginx/html/index.html
+    restart: always
+
+  php:
+    image: php:8.0-fpm
+
+  mysql:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admmin'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_DATABASE: 'admin'
+    ports:
+      - 3306:3306
+
+  python:
+    build: ./
+    ports:
+      - 12345:12345
+
+volumes:
+  mysqldata: {}

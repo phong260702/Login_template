@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <h1>Testing</h1>
+
+    <div id="vue" v-cloak>
+      <label for="username">Username: </label>
+      <input type="text" v-model="username" />
+      <label for="password">Password: </label>
+      <input type="password" v-model="password" />
+      <button v-on:click="sendData()">Login</button>
+      <button v-on:click="addUser()">Add user</button>
+      <button v-on:click="deleteUser()">Delete (Only need username)</button>
+      <button v-on:click="getAll()">Display all</button>
+      <p>{{username}}</p>
+
+      <div>
+        <h1>Response:</h1>
+        <p>{{response}}</p>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@2"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/axios/dist/axios.min.js"
+    ></script>
+    <script>
+      let report = new Vue({
+        el: "#vue",
+        data: {
+          username: "",
+          password: "",
+          response: "",
+        },
+
+        methods: {
+          sendData: function () {
+            let data =
+              "username=" + this.username + "&password=" + this.password;
+
+            axios
+              .post("http://localhost:12345/login", data, {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+              })
+              .then((response) => {
+                this.response = response.data;
+                console.log(response.data);
+              });
+          },
+
+          addUser: function () {
+            let data =
+              "username=" + this.username + "&password=" + this.password;
+
+            axios
+              .put("http://localhost:12345/users", data, {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+              })
+              .then((response) => {
+                this.response = response.data;
+                console.log(response.data);
+              });
+          },
+
+          deleteUser: function () {
+            let config = {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Access-Control-Allow-Origin": "+",
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+                "Access-Control-Allow-Headers":
+                  "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+              },
+            };
+
+            let data =
+              "username=" + this.username + "&password=" + this.password;
+            console.log(data);
+            axios
+              .post("http://localhost:12345/users", data, config)
+              .then((response) => {
+                this.response = response.data;
+                console.log(response.data);
+              });
+          },
+
+          getAll: function () {
+            axios.get("http://localhost:12345/users").then((response) => {
+              this.response = response.data;
+              console.log(response.data);
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
